@@ -12,6 +12,7 @@ export default function Pagination() {
     const data = await res.json()
     if (data && data.products) {
       setProducts(data.products);
+      console.log(data.products)
     }
   }
   console.log(products)
