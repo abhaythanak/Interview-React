@@ -12,6 +12,11 @@ export default function Todo() {
             setTodo("");
     };
 
+    const handleDelete = (i)=>{
+        const Filter = todos.filter((_,id)=> id !== i)
+        setTodos(Filter)
+    }
+
     return (
         <>
             <div className="flex flex-col justify-center items-center p-4">
@@ -28,8 +33,9 @@ export default function Todo() {
                 </form>
                 <div className="w-full max-w-md">
                     {todos.map((text, i) => (
-                        <div className="bg-gray-100 mb-2 p-2 rounded" key={i}>
+                        <div className="flex justify-between bg-gray-100 mb-2 p-2 rounded just just just just" key={i}>
                             <p>{text}</p>
+                            <button onClick={()=> handleDelete(i)} className='bg-slate-500 m-2 p-2' >x</button>
                         </div>
                     ))}
                 </div>
