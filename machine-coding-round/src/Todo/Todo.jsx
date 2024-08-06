@@ -3,19 +3,38 @@ import { useState } from 'react';
 export default function Todo() {
     const [todo, setTodo] = useState("");
     const [todos, setTodos] = useState([]);
-    console.log(todos)
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(null);
 
     const addTodo = (e) => {
         e.preventDefault();
-
-            setTodos([...todos, todo]);
+        if (todo.length === 0) {
+            alert("Input should not be empty");
+        } else {
+            if (isEditing) {
+                const updatedTodos = todos.map((item, index) =>
+                    index === currentIndex ? todo : item
+                );
+                setTodos(updatedTodos);
+                setIsEditing(false);
+                setCurrentIndex(null);
+            } else {
+                setTodos([...todos, todo]);
+            }
             setTodo("");
+        }
     };
 
-    const handleDelete = (i)=>{
-        const Filter = todos.filter((_,id)=> id !== i)
-        setTodos(Filter)
-    }
+    const handleEdit = (index) => {
+        setIsEditing(true);
+        setTodo(todos[index]);
+        setCurrentIndex(index);
+    };
+
+    const handleDelete = (index) => {
+        const filteredTodos = todos.filter((_, id) => id !== index);
+        setTodos(filteredTodos);
+    };
 
     return (
         <>
@@ -29,13 +48,18 @@ export default function Todo() {
                         placeholder="Enter Todo" 
                         className="p-2 border rounded"
                     />
-                    <button type="submit" className="bg-blue-500 p-2 rounded text-white">Add</button>
+                    <button type="submit" className="bg-blue-500 p-2 rounded text-white">
+                        {isEditing ? "Update" : "Add"}
+                    </button>
                 </form>
                 <div className="w-full max-w-md">
-                    {todos.map((text, i) => (
-                        <div className="flex justify-between bg-gray-100 mb-2 p-2 rounded just just just just" key={i}>
+                    {todos.map((text, index) => (
+                        <div className="flex justify-between bg-gray-100 mb-2 p-2 rounded" key={index}>
                             <p>{text}</p>
-                            <button onClick={()=> handleDelete(i)} className='bg-slate-500 m-2 p-2' >x</button>
+                            <div className="">
+                                <button onClick={() => handleEdit(index)} className="bg-slate-500 m-2 p-2">Edit</button>
+                                <button onClick={() => handleDelete(index)} className="bg-slate-500 m-2 p-2">Delete</button>
+                            </div>
                         </div>
                     ))}
                 </div>
